@@ -5,6 +5,8 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
+import javax.swing.UIManager.*;
 
 /**
  * GUI to control the shark in the Air Aquarium project. Communicates via serial port.
@@ -12,15 +14,16 @@ import javax.swing.JOptionPane;
  */
 public class SharkControlGUI extends javax.swing.JFrame {
 
-    /** 
-	 * Instance variables
-	 */
+    /**
+     * Instance variables
+     */
+    
     // Buttons
     private javax.swing.JButton upButton;
     private javax.swing.JButton downButton;
     private javax.swing.JButton rightButton;
     private javax.swing.JButton leftButton;
-
+    
     // Labels
     private javax.swing.JLabel forwardLabel;
     private javax.swing.JLabel heightLabel;
@@ -30,55 +33,56 @@ public class SharkControlGUI extends javax.swing.JFrame {
     private javax.swing.JLabel mediumLabel;
     private javax.swing.JLabel slowLabel;
     private javax.swing.JLabel stoptLabel;
-
+    
     // TextFields
     private static javax.swing.JTextField forwardTextField;
     private static javax.swing.JTextField heightTextField;
-
-	// Other swing elements
+    
+    // Other swing elements
     private javax.swing.JCheckBox autoCheckBox;	// CheckBox for AutoShark
     private javax.swing.JSlider throttleSlider; // Slider for Throttle
-	
-	// Other instance variables
+    
+    // Other instance variables
     private static boolean continueThread;      // Flag for thread interruption
     private static InputStream in;              // In stream
     private static OutputStream out;            // Out stream
-	
-	/**
-	 * Constants
-	 */
-	// Forward throttle messages
-	private final static String THROTTLE_0 = "{1|6|0|01|0}";
-	private final static String THROTTLE_25 = "{1|6|0|01|1}";
-	private final static String THROTTLE_50 = "{1|6|0|01|2}";
-	private final static String THROTTLE_75 = "{1|6|0|01|3}";
-	private final static String THROTTLE_100 = "{1|6|0|01|4}";
-	
-	// Autopilot messages
-	private final static String AUTO_OFF = "{1|7|0|01|0}";
-	private final static String AUTO_ON = "{1|7|0|01|1}";
-	
-	// Direction messages
-	private final static String UP_OFF = "{1|2|0|01|0}";
-	private final static String UP_ON = "{1|2|0|01|1}";
-	private final static String DOWN_OFF = "{1|3|0|01|0}";
-	private final static String DOWN_ON = "{1|3|0|01|1}";
-	private final static String RIGHT_OFF = "{1|4|0|01|0}";
-	private final static String RIGHT_ON = "{1|4|0|01|1}";
-	private final static String LEFT_OFF = "{1|5|0|01|0}";
-	private final static String LEFT_ON = "{1|5|0|01|1}";
-	
-	// Sensor reading request messages
-	private final static String HEIGHT_SENSOR_REQUEST = "{0|0|0|00}";
-	private final static String FORWARD_SENSOR_REQUEST = "{0|1|0|00}";
-	
-	// Other constants
-	private final static int LEFT_CURLY_BRACE_ASCII = 123;
-	private final static int RIGHT_CURLY_BRACE_ASCII = 125;
-	private final static String MESSAGE_SEPARATOR = "|";
-	private final static int HEIGHT_SENSOR_INDEX = 0;
-	private final static int FORWARD_SENSOR_INDEX = 1;
-	
+   
+    /**
+     * Constants
+     */
+    
+    // Forward throttle messages
+    private final static String THROTTLE_0 = "{1|6|0|01|0}";
+    private final static String THROTTLE_25 = "{1|6|0|01|1}";
+    private final static String THROTTLE_50 = "{1|6|0|01|2}";
+    private final static String THROTTLE_75 = "{1|6|0|01|3}";
+    private final static String THROTTLE_100 = "{1|6|0|01|4}";
+    
+    // Autopilot messages
+    private final static String AUTO_OFF = "{1|7|0|01|0}";
+    private final static String AUTO_ON = "{1|7|0|01|1}";
+    
+    // Direction messages
+    private final static String UP_OFF = "{1|2|0|01|0}";
+    private final static String UP_ON = "{1|2|0|01|1}";
+    private final static String DOWN_OFF = "{1|3|0|01|0}";
+    private final static String DOWN_ON = "{1|3|0|01|1}";
+    private final static String RIGHT_OFF = "{1|4|0|01|0}";
+    private final static String RIGHT_ON = "{1|4|0|01|1}";
+    private final static String LEFT_OFF = "{1|5|0|01|0}";
+    private final static String LEFT_ON = "{1|5|0|01|1}";
+    
+    // Sensor reading request messages
+    private final static String HEIGHT_SENSOR_REQUEST = "{0|0|0|00}";
+    private final static String FORWARD_SENSOR_REQUEST = "{0|1|0|00}";
+    
+    // Other constants
+    private final static int LEFT_CURLY_BRACE_ASCII = 123;
+    private final static int RIGHT_CURLY_BRACE_ASCII = 125;
+    private final static String MESSAGE_SEPARATOR = "|";
+    private final static int HEIGHT_SENSOR_INDEX = 0;
+    private final static int FORWARD_SENSOR_INDEX = 1;
+
     /**
      * Constructor. Creates new form SharkControlGUI
      */
@@ -87,8 +91,8 @@ public class SharkControlGUI extends javax.swing.JFrame {
     }
 
     /**
-	 * This method is called from within the constructor to initialize the form.
-	 */
+     * This method is called from within the constructor to initialize the form.
+     */
     @SuppressWarnings("unchecked")
     private void initComponents() {
         throttleSlider = new javax.swing.JSlider();
@@ -132,13 +136,14 @@ public class SharkControlGUI extends javax.swing.JFrame {
             }
         });
 
-		/**
-		 * Labels
-		 */
-		// Trottle slider
+        /**
+         * Labels
+         */
+        
+        // Trottle slider
         throttleLabel.setFont(new java.awt.Font("Tahoma", 1, 12));
         throttleLabel.setText("Forward throttle");
-		fullLabel.setText("Full");
+        fullLabel.setText("Full");
         highLabel.setText("High");
         mediumLabel.setText("Medium");
         slowLabel.setText("Slow");
@@ -154,8 +159,8 @@ public class SharkControlGUI extends javax.swing.JFrame {
             }
         });
 
-		/* Direction buttons */ 
-		// Up button
+        /* Direction buttons */
+        // Up button
         upButton.setText("Up");
         upButton.addMouseListener(new java.awt.event.MouseAdapter() {
 
@@ -168,7 +173,7 @@ public class SharkControlGUI extends javax.swing.JFrame {
             }
         });
 
-		// Down button
+        // Down button
         downButton.setText("Down");
         downButton.addMouseListener(new java.awt.event.MouseAdapter() {
 
@@ -181,7 +186,7 @@ public class SharkControlGUI extends javax.swing.JFrame {
             }
         });
 
-		// Right button
+        // Right button
         rightButton.setText("Right");
         rightButton.addMouseListener(new java.awt.event.MouseAdapter() {
 
@@ -194,7 +199,7 @@ public class SharkControlGUI extends javax.swing.JFrame {
             }
         });
 
-		// Left button
+        // Left button
         leftButton.setText("Left");
         leftButton.addMouseListener(new java.awt.event.MouseAdapter() {
 
@@ -207,18 +212,18 @@ public class SharkControlGUI extends javax.swing.JFrame {
             }
         });
 
-		/* Sensor readings displays */ 
-		// Forward sensor
+        /* Sensor readings displays */
+        // Forward sensor
         forwardLabel.setText("Forward sensor");
-		forwardTextField.setBackground(new java.awt.Color(0, 0, 0));
+        forwardTextField.setBackground(new java.awt.Color(0, 0, 0));
         forwardTextField.setEditable(false);
         forwardTextField.setFont(new java.awt.Font("Lucida Console", 1, 12));
         forwardTextField.setForeground(new java.awt.Color(51, 204, 0));
         forwardTextField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         forwardTextField.setToolTipText("");
-        
-		// Height sensor
-		heightLabel.setText("Height sensor");
+
+        // Height sensor
+        heightLabel.setText("Height sensor");
         heightTextField.setBackground(new java.awt.Color(0, 0, 0));
         heightTextField.setEditable(false);
         heightTextField.setFont(new java.awt.Font("Lucida Console", 1, 12));
@@ -244,6 +249,7 @@ public class SharkControlGUI extends javax.swing.JFrame {
     /**
      * Event listeners
      */
+    
     // Forward throttle
     private void throttleSliderStateChanged(javax.swing.event.ChangeEvent evt) {
 
@@ -253,27 +259,27 @@ public class SharkControlGUI extends javax.swing.JFrame {
         if (value == 0) {
             System.out.println("Forward Throttle set to: Stop");
             sendPacket(THROTTLE_0);
-        }
+        } 
         // If throttle set to 25%
         else if (value == 25) {
             System.out.println("Forward Throttle set to: Slow");
             sendPacket(THROTTLE_25);
-        }
+        } 
         // If throttle set to 50%
         else if (value == 50) {
             System.out.println("Forward Throttle set to: Medium");
             sendPacket(THROTTLE_50);
-        }
+        } 
         // If throttle set to 75%
         else if (value == 75) {
             System.out.println("Forward Throttle set to: High");
             sendPacket(THROTTLE_75);
-        }
+        } 
         // If throttle set to 100%
         else if (value == 100) {
             System.out.println("Forward Throttle set to: Full");
             sendPacket(THROTTLE_100);
-        }
+        } 
         // If throttle set to values in-between, do nothing
         else {
         }
@@ -292,7 +298,7 @@ public class SharkControlGUI extends javax.swing.JFrame {
 
             System.out.println("AutoShark: On");
             sendPacket(AUTO_ON);
-        }
+        } 
         // If the checkbox is deselected
         else {
             // Enable the manual controls
@@ -313,8 +319,7 @@ public class SharkControlGUI extends javax.swing.JFrame {
         if (!autoCheckBox.isSelected()) {
             System.out.println("Up selected");
             sendPacket(UP_ON);
-        }
-        else {
+        } else {
         }
     }
 
@@ -325,8 +330,7 @@ public class SharkControlGUI extends javax.swing.JFrame {
         if (!autoCheckBox.isSelected()) {
             System.out.println("Up deselected");
             sendPacket(UP_OFF);
-        }
-        else {
+        } else {
         }
     }
 
@@ -337,8 +341,7 @@ public class SharkControlGUI extends javax.swing.JFrame {
         if (!autoCheckBox.isSelected()) {
             System.out.println("Down selected");
             sendPacket(DOWN_ON);
-        }
-        else {
+        } else {
         }
     }
 
@@ -349,8 +352,7 @@ public class SharkControlGUI extends javax.swing.JFrame {
         if (!autoCheckBox.isSelected()) {
             System.out.println("Down deselected");
             sendPacket(DOWN_OFF);
-        }
-        else {
+        } else {
         }
     }
 
@@ -361,8 +363,7 @@ public class SharkControlGUI extends javax.swing.JFrame {
         if (!autoCheckBox.isSelected()) {
             System.out.println("Right selected");
             sendPacket(RIGHT_ON);
-        }
-        else {
+        } else {
         }
     }
 
@@ -372,9 +373,8 @@ public class SharkControlGUI extends javax.swing.JFrame {
         // Works only if the autoCheckBox is deselected
         if (!autoCheckBox.isSelected()) {
             System.out.println("Right deselected");
-			sendPacket(RIGHT_OFF);
-        }
-        else {
+            sendPacket(RIGHT_OFF);
+        } else {
         }
     }
 
@@ -385,8 +385,7 @@ public class SharkControlGUI extends javax.swing.JFrame {
         if (!autoCheckBox.isSelected()) {
             System.out.println("Left selected");
             sendPacket(LEFT_ON);
-        }
-        else {
+        } else {
         }
     }
 
@@ -397,8 +396,7 @@ public class SharkControlGUI extends javax.swing.JFrame {
         if (!autoCheckBox.isSelected()) {
             System.out.println("Left deselected");
             sendPacket(LEFT_OFF);
-        }
-        else {
+        } else {
         }
     }
 
@@ -418,9 +416,10 @@ public class SharkControlGUI extends javax.swing.JFrame {
     /**
      * Serial communication
      */
+    
     // Lists available serial ports. Returns chosen port
     private static String selectPort() {
-	
+
         // To contain the list of available ports
         ArrayList<String> ports = new ArrayList<String>();
 
@@ -448,8 +447,7 @@ public class SharkControlGUI extends javax.swing.JFrame {
             CommPortIdentifier portId = CommPortIdentifier.getPortIdentifier(portName);
             if (portId.isCurrentlyOwned()) {
                 System.out.println("Error: Port is currently in use");
-            }
-            else {
+            } else {
                 CommPort commPort = portId.open(this.getClass().getName(),
                         5000);
 
@@ -463,8 +461,7 @@ public class SharkControlGUI extends javax.swing.JFrame {
 
                     new Thread(new SerialReader(in)).start();
                     new Thread(new SerialWriter(out)).start();
-                }
-                else {
+                } else {
                     System.out.println("Error: Only serial ports are handled");
                 }
             }
@@ -519,7 +516,7 @@ public class SharkControlGUI extends javax.swing.JFrame {
             out.write(packet.getBytes());
             System.out.println("Packet sent: " + packet);
         } catch (IOException e) {
-			System.out.println("Error: Packet not sent: " + packet);
+            System.out.println("Error: Packet not sent: " + packet);
         }
     }
 
@@ -545,10 +542,10 @@ public class SharkControlGUI extends javax.swing.JFrame {
     private static class sensorReceiveThread extends Thread {
 
         public void run() {
-            char[] buffer = new char[1024];	// To store the characters received
-            boolean bufferFlag = true;		// To stop looping and allow the thread to sleep
-            int bufferPointer = 0;			// Index of next available space
-            int reading;					// Reading obtained from the sensors
+            char[] buffer = new char[1024]; // To store the characters received
+            boolean bufferFlag = true;      // To stop looping and allow the thread to sleep
+            int bufferPointer = 0;          // Index of next available space
+            int reading;                    // Reading obtained from the sensors
 
             while (continueThread) {
                 while (bufferFlag) {
@@ -559,15 +556,15 @@ public class SharkControlGUI extends javax.swing.JFrame {
                         // If the reading is empty (-1), stop looping
                         if (reading < 0) {
                             bufferFlag = false;
-                        }
+                        } 
                         // If reading is '{', start filling the buffer from 0
                         else if (reading == LEFT_CURLY_BRACE_ASCII) {
                             bufferPointer = 0;
-                        }
+                        } 
                         // If reading is '}', message is complete - update the sensors' displays
                         else if (reading == RIGHT_CURLY_BRACE_ASCII) {
                             updateDisplay(buffer);
-                        }
+                        } 
                         // Else, keep adding the characters to the buffer
                         else {
                             buffer[bufferPointer++] = (char) reading;
@@ -604,9 +601,8 @@ public class SharkControlGUI extends javax.swing.JFrame {
         if (buffer[2] == FORWARD_SENSOR_INDEX) {
             forwardTextField.setText(data);
         }
-        }
     }
-
+    
     /**
      * Main method
      * @param args the command line arguments
@@ -620,6 +616,23 @@ public class SharkControlGUI extends javax.swing.JFrame {
                     new SerialComm().connect(selectPort());
                 } catch (Exception e) {
                     e.printStackTrace();
+                }
+                
+                // Setup Nimbus skin
+                try {
+                    for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+                        if ("Nimbus".equals(info.getName())) {
+                            UIManager.setLookAndFeel(info.getClassName());
+                            break;
+                        }
+                    }
+                } catch (Exception e) {
+                    // If Nimbus is not available, fall back to cross-platform
+                    try {
+                        UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+                    } catch (Exception ex) {
+                        // Reinstall Java
+                    }
                 }
 
                 // Start sensor threads and GUI
