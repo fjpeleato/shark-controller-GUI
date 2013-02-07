@@ -8,6 +8,8 @@ they can be controlled through a computer, Android phone or tablet.
 
 For more information, visit http://discoverylab.cis.fiu.edu/index.php?mid=Projects_Undergraduate&document_srl=954
 
+![Screenshot](/Screenshots & pictures/Screenshot.JPG)
+
 The SharkControlGUI, as its name indicates, serves as a remote control for the shark prototype. Only requirement is a
 computer with Java installed and a serial port connection to the fish (Bluetooth or direct connection).
 
